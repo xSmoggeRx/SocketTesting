@@ -15,13 +15,13 @@ export default class App extends Component<Props> {
       idSocket: null,
     }
     // Creating the socket-client instance will automatically connect to the server.
-    socket = SocketIOClient('http://localhost:3000');
+    socket = SocketIOClient('http://192.168.208.41:3000');
 
     socket.on('login', (data) => {
       console.log('TRIGGER SOCKET ON MESSAGE', data.idSocket);
       console.log('message recieved: ', data.message);
       this.setState({ messages: data.message, idSocket: data.idSocket });
-      socket.on(data.idSocket, (channelName)=>{
+      socket.on('channelRequest', (channelName)=>{
         console.log('Channel connection succeed to '+channelName);
         self.setState({connectedChanel: channelName});
         socket.on(channelName, function(dataRecieved){
@@ -33,10 +33,10 @@ export default class App extends Component<Props> {
   }
 
   connectToChannel(){
-    const { idSocket, channelToConnect } = self.state;
-    if(channelToConnect.length > 0 && idSocket != null){
-      console.log('idSocket: ',+ idSocket +' channel: ' + channelToConnect);
-      socket.emit(idSocket, channelToConnect);
+    const { channelToConnect } = self.state;
+    if(channelToConnect.length > 0){
+      console.log('channel: ' + channelToConnect);
+      socket.emit('channelRequest', channelToConnect);
     }
   }
 
