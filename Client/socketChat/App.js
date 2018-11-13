@@ -37,6 +37,7 @@ export default class App extends Component<Props> {
     if(channelToConnect.length > 0){
       console.log('channel: ' + channelToConnect);
       socket.emit('channelRequest', channelToConnect);
+      self.setState({channelToConnect: ''});
     }
   }
 
@@ -45,6 +46,7 @@ export default class App extends Component<Props> {
     console.log('sendToChat trigger', messageToSend, connectedChanel);
     if(messageToSend.length > 0){
       socket.emit(connectedChanel, messageToSend);
+      self.setState({messageToSend: ''});
     }
   }
 
@@ -73,7 +75,7 @@ export default class App extends Component<Props> {
             </TouchableHighlight>
           </View>
           <View style={{flex: 0.1}}>
-            <Text>{'SocketChat chanel: ' + self.state.channelConnected}</Text>
+            <Text>{self.state.connectedChanel != null ? ('SocketChat chanel: ' + self.state.connectedChanel) : 'Here will be displayed the Channel Name'}</Text>
           </View>
           <View style={{flex: 0.4}}>
             <Text>{'Last message'}</Text>
